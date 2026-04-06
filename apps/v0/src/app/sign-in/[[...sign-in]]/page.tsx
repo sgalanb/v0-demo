@@ -9,7 +9,7 @@ export default async function SignInPage() {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center p-6">
+    <div className="flex flex-1 items-center justify-center">
       <SignIn />
     </div>
   );

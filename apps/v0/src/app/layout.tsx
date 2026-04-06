@@ -1,5 +1,5 @@
 import "@workspace/ui/globals.css";
-import { ClerkProvider, Show, UserButton } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -32,14 +32,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <ThemeProvider>
-          <ClerkProvider>
-            <header className="flex h-16 items-center justify-end gap-4 p-4">
-              <Show when="signed-in">
-                <UserButton />
-              </Show>
-            </header>
-            {children}
-          </ClerkProvider>
+          <ClerkProvider>{children}</ClerkProvider>
         </ThemeProvider>
       </body>
     </html>

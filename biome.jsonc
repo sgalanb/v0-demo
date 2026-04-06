@@ -1,5 +1,17 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "root": true,
-  "extends": ["ultracite/biome/core"]
+  "extends": ["ultracite/biome/core"],
+  "linter": {
+    "rules": {
+      "a11y": {
+        "useAnchorContent": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded"
+    }
+  }
 }

@@ -1,15 +1,14 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from "react"
 
 export function MarketingHome({
   landingExtra,
 }: {
   /** Shown only on `/` (signed out), e.g. Get started. `/home` omits this. */
-  landingExtra?: ReactNode;
+  landingExtra?: ReactNode
 }) {
   return (
-    <main className="flex flex-1 flex-col">
+    <main className="flex h-screen flex-1 flex-col items-center justify-center">
       <div>{landingExtra}</div>
-      <p>v0.app</p>
     </main>
-  );
+  )
 }
