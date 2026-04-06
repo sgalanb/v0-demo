@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "turbo run dev",
     "build": "next build",
     "start": "next start",
-    "check": "ultracite check",
-    "fix": "ultracite fix"
+    "check": "biome check .",
+    "fix": "biome check --write .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@clerk/nextjs": "7.0.8",

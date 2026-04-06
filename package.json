@@ -4,8 +4,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "check": "ultracite check",
-    "fix": "ultracite fix"
+    "check": "turbo run check",
+    "fix": "turbo run fix",
+    "typecheck": "turbo run typecheck"
   },
   "peerDependencies": {
     "typescript": "^5"
