@@ -2,7 +2,8 @@
   "folders": [
     { "path": ".", "name": "root" },
     { "path": "apps/basehub", "name": "basehub" },
-    { "path": "apps/v0", "name": "v0" }
+    { "path": "apps/v0", "name": "v0" },
+    { "path": "packages/ui", "name": "ui" }
   ],
   "settings": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",

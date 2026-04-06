@@ -1,8 +1,5 @@
 import type { ReactNode } from "react";
 
-/**
- * Single place to edit marketing / landing content. Used by `/` (signed out) and `/home`.
- */
 export function MarketingHome({
   landingExtra,
 }: {
@@ -11,8 +8,8 @@ export function MarketingHome({
 }) {
   return (
     <main className="flex flex-1 flex-col">
-      {/* Shared marketing — add hero, sections, etc. here once */}
-      {landingExtra}
+      <div>{landingExtra}</div>
+      <p>v0.app</p>
     </main>
   );
 }
