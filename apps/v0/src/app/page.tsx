@@ -12,8 +12,8 @@ export default function Home() {
           src="/next.svg"
           width={100}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs font-semibold text-3xl text-black leading-10 tracking-tight dark:text-zinc-50">
+        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-center">
+          <h1 className="font-semibold text-3xl text-black leading-10 tracking-tight dark:text-zinc-50">
             To get started, edit the page.tsx file.
           </h1>
           <p className="max-w-md text-lg text-zinc-600 leading-8 dark:text-zinc-400">
