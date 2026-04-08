@@ -36,9 +36,11 @@ import {
   PlusIcon,
   Trash2Icon,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { api } from "@/convex/_generated/api"
-import type { Doc, Id } from "@/convex/_generated/dataModel"
+import { createRepoFromTemplate, deleteRepo } from "@/lib/code-storage/actions"
+import { api } from "@/lib/convex/_generated/api"
+import type { Doc } from "@/lib/convex/_generated/dataModel"
 
 export function NavProjects({
   projects,
@@ -47,35 +49,49 @@ export function NavProjects({
   projects: Doc<"projects">[]
   userId?: string // technically optional, but we know it's always set
 }) {
+  const router = useRouter()
   const { isMobile } = useSidebar()
   const createProject = useMutation(api.projects.createProject)
   const deleteProject = useMutation(api.projects.deleteProject)
 
-  const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false)
-  const [newProjectName, setNewProjectName] = useState("")
-  const [isCreateProjectLoading, setIsCreateProjectLoading] = useState(false)
+  const [isCreateProjectOpen, setIsCreateProjectOpen] = useState<boolean>(false)
+  const [newProjectName, setNewProjectName] = useState<string>("")
+  const [isCreateProjectLoading, setIsCreateProjectLoading] =
+    useState<boolean>(false)
 
   const handleCreateProject = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
       setIsCreateProjectLoading(true)
       if (userId) {
-        await createProject({ name: newProjectName, ownerId: userId })
+        const project = await createProject({
+          name: newProjectName,
+          ownerId: userId,
+        })
+        await createRepoFromTemplate({
+          templateRepoId: "nextjs-template",
+          newRepoId: project.slug,
+        })
+        router.push(`/projects/${project.slug}`)
       }
-      setIsCreateProjectLoading(false)
-      setIsCreateProjectOpen(false)
-      setNewProjectName("")
     } catch (error) {
       console.error(error)
+    } finally {
       setIsCreateProjectLoading(false)
       setIsCreateProjectOpen(false)
       setNewProjectName("")
     }
   }
 
-  const handleDeleteProject = async (id: Id<"projects">) => {
+  const handleDeleteProject = async (project: Doc<"projects">) => {
     try {
-      await deleteProject({ id })
+      await deleteProject({ id: project._id })
+
+      await deleteRepo(project.slug)
+
+      if (window.location.pathname === `/projects/${project.slug}`) {
+        router.push("/")
+      }
     } catch (error) {
       console.error(error)
     }
@@ -117,7 +133,7 @@ export function NavProjects({
                   <span>Share Project</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator /> */}
-                <DropdownMenuItem onClick={() => handleDeleteProject(item._id)}>
+                <DropdownMenuItem onClick={() => handleDeleteProject(item)}>
                   <Trash2Icon className="text-muted-foreground" />
                   <span>Delete Project</span>
                 </DropdownMenuItem>

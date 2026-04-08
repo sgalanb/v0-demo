@@ -1,4 +1,8 @@
+import { fetchQuery } from "convex/nextjs"
 import { PageHeader } from "@/components/page-header"
+import { getBranches } from "@/lib/code-storage/actions"
+import { api } from "@/lib/convex/_generated/api"
+import ProjectContent from "./content"
 
 export default async function ProjectPage({
 	params,
@@ -6,15 +10,20 @@ export default async function ProjectPage({
 	params: Promise<{ slug: string }>
 }) {
 	const { slug } = await params
+
+	const project = await fetchQuery(api.projects.getProjectBySlug, {
+		slug,
+	})
+
+	const branches = await getBranches(project.slug)
+
 	return (
 		<>
 			<PageHeader
-				currentBreadcrumb={{ label: `${slug}` }}
+				currentBreadcrumb={{ label: `${project.name ?? slug}` }}
 				parentBreadcrumb={{ label: "Projects" }}
 			/>
-			<div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-				<div className="min-h-screen flex-1 rounded-xl bg-muted/50 md:min-h-min" />
-			</div>
+			{branches && <ProjectContent branches={branches} slug={slug} />}
 		</>
 	)
 }

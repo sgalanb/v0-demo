@@ -1,6 +1,14 @@
 {
     "$schema": "https://turborepo.dev/schema.json",
     "ui": "tui",
+    "globalEnv": [
+      "CLERK_SECRET_KEY",
+      "CODE_STORAGE_API_KEY",
+      "CODE_STORAGE_ORG_NAME",
+      "CONVEX_DEPLOY_KEY",
+      "CONVEX_DEPLOYMENT",
+      "VERCEL_OIDC_TOKEN"
+    ],
     "tasks": {
       "build": {
         "dependsOn": ["^build"],

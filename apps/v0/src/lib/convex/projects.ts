@@ -1,5 +1,6 @@
-import { v } from "convex/values"
+import { type Infer, v } from "convex/values"
 import { mutation, query } from "@/lib/convex/_generated/server"
+import type { projectsTable } from "@/lib/convex/schema"
 
 export const createProject = mutation({
   args: {
@@ -25,12 +26,17 @@ export const createProject = mutation({
       suffix++
     }
 
-    const project = await ctx.db.insert("projects", {
+    await ctx.db.insert("projects", {
       name: args.name,
       ownerId: args.ownerId,
       slug,
     })
-    return project
+
+    return {
+      name: args.name,
+      slug,
+      ownerId: args.ownerId,
+    } satisfies Infer<typeof projectsTable>
   },
 })
 
@@ -44,6 +50,22 @@ export const getProjects = query({
       .withIndex("by_owner_id", (q) => q.eq("ownerId", args.ownerId))
       .collect()
     return projects
+  },
+})
+
+export const getProjectBySlug = query({
+  args: {
+    slug: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const project = await ctx.db
+      .query("projects")
+      .withIndex("by_slug", (q) => q.eq("slug", args.slug))
+      .unique()
+    if (!project) {
+      throw new Error("Project not found")
+    }
+    return project
   },
 })
 
