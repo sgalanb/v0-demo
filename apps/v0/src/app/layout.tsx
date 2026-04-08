@@ -1,8 +1,7 @@
+import { Providers } from "@/app/providers"
 import "@workspace/ui/globals.css"
-import { ClerkProvider } from "@clerk/nextjs"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
 
 const geistSans = Geist({
   variable: "--font-sans",
@@ -31,9 +30,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
-        <ThemeProvider>
-          <ClerkProvider>{children}</ClerkProvider>
-        </ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

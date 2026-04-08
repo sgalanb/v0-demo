@@ -1,12 +1,25 @@
 "use client"
 
+import { Button } from "@workspace/ui/components/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@workspace/ui/components/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu"
+import { Field, FieldGroup } from "@workspace/ui/components/field"
+import { Input } from "@workspace/ui/components/input"
+import { Label } from "@workspace/ui/components/label"
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -16,31 +29,66 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@workspace/ui/components/sidebar"
+import { useMutation } from "convex/react"
 import {
-  FolderIcon,
+  Loader2Icon,
   MoreHorizontalIcon,
-  ShareIcon,
+  PlusIcon,
   Trash2Icon,
 } from "lucide-react"
+import { useState } from "react"
+import { api } from "@/convex/_generated/api"
+import type { Doc, Id } from "@/convex/_generated/dataModel"
 
 export function NavProjects({
   projects,
+  userId,
 }: {
-  projects: {
-    name: string
-    url: string
-    icon: React.ReactNode
-  }[]
+  projects: Doc<"projects">[]
+  userId?: string // technically optional, but we know it's always set
 }) {
   const { isMobile } = useSidebar()
+  const createProject = useMutation(api.projects.createProject)
+  const deleteProject = useMutation(api.projects.deleteProject)
+
+  const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false)
+  const [newProjectName, setNewProjectName] = useState("")
+  const [isCreateProjectLoading, setIsCreateProjectLoading] = useState(false)
+
+  const handleCreateProject = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      setIsCreateProjectLoading(true)
+      if (userId) {
+        await createProject({ name: newProjectName, ownerId: userId })
+      }
+      setIsCreateProjectLoading(false)
+      setIsCreateProjectOpen(false)
+      setNewProjectName("")
+    } catch (error) {
+      console.error(error)
+      setIsCreateProjectLoading(false)
+      setIsCreateProjectOpen(false)
+      setNewProjectName("")
+    }
+  }
+
+  const handleDeleteProject = async (id: Id<"projects">) => {
+    try {
+      await deleteProject({ id })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton render={<a href={item.url} />}>
-              {item.icon}
+          <SidebarMenuItem key={item.slug}>
+            <SidebarMenuButton render={<a href={`/projects/${item.slug}`} />}>
+              {/* {item.icon} */}
               <span>{item.name}</span>
             </SidebarMenuButton>
             <DropdownMenu>
@@ -60,7 +108,7 @@ export function NavProjects({
                 className="w-48"
                 side={isMobile ? "bottom" : "right"}
               >
-                <DropdownMenuItem>
+                {/* <DropdownMenuItem>
                   <FolderIcon className="text-muted-foreground" />
                   <span>View Project</span>
                 </DropdownMenuItem>
@@ -68,8 +116,8 @@ export function NavProjects({
                   <ShareIcon className="text-muted-foreground" />
                   <span>Share Project</span>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuSeparator /> */}
+                <DropdownMenuItem onClick={() => handleDeleteProject(item._id)}>
                   <Trash2Icon className="text-muted-foreground" />
                   <span>Delete Project</span>
                 </DropdownMenuItem>
@@ -78,10 +126,56 @@ export function NavProjects({
           </SidebarMenuItem>
         ))}
         <SidebarMenuItem>
-          <SidebarMenuButton>
-            <MoreHorizontalIcon />
-            <span>More</span>
-          </SidebarMenuButton>
+          <Dialog
+            onOpenChange={(open) => {
+              setIsCreateProjectOpen(open)
+              if (!open) {
+                setNewProjectName("")
+              }
+            }}
+            open={isCreateProjectOpen}
+          >
+            <DialogTrigger render={<SidebarMenuButton />}>
+              <PlusIcon />
+              <span>New Project</span>
+            </DialogTrigger>
+            <DialogContent>
+              <form className="contents" onSubmit={handleCreateProject}>
+                <DialogHeader>
+                  <DialogTitle>Create a New Project</DialogTitle>
+                  <DialogDescription>
+                    For now this is the only way to start a new project.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <FieldGroup>
+                  <Field>
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      onChange={(e) => setNewProjectName(e.target.value)}
+                      value={newProjectName}
+                    />
+                  </Field>
+                </FieldGroup>
+
+                <DialogFooter>
+                  <DialogClose
+                    render={<Button variant="outline">Cancel</Button>}
+                  />
+                  <Button disabled={isCreateProjectLoading} type="submit">
+                    {isCreateProjectLoading && (
+                      <Loader2Icon className="absolute animate-spin" />
+                    )}
+                    <span className={isCreateProjectLoading ? "opacity-0" : ""}>
+                      Create Project
+                    </span>
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
