@@ -1,11 +1,45 @@
 "use client"
 
-import { useEffect } from "react"
+import { Loader2Icon } from "lucide-react"
+import { useEffect, useState } from "react"
+import {
+  WebPreview,
+  WebPreviewBody,
+  WebPreviewNavigation,
+  WebPreviewUrl,
+} from "@/components/ai/web-preview"
 import { heartbeatSandbox } from "./actions"
 
 const HEARTBEAT_INTERVAL_MS = 2 * 60 * 1000 // 2 minutes
+const POLL_INTERVAL_MS = 500
 
 export function PreviewIFrame({ name, src }: { name: string; src: string }) {
+  const [ready, setReady] = useState(false)
+
+  // Poll the sandbox URL until the dev server is responding
+  useEffect(() => {
+    const controller = new AbortController()
+
+    async function poll() {
+      while (!controller.signal.aborted) {
+        try {
+          await fetch(src, { mode: "no-cors", signal: controller.signal })
+          setReady(true)
+          return
+        } catch {
+          if (controller.signal.aborted) {
+            return
+          }
+        }
+        await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS))
+      }
+    }
+
+    poll()
+
+    return () => controller.abort()
+  }, [src])
+
   // add 2 minutes to the sandbox timeout every 2 minutes
   // the default timeout is 5 minutes so it supports 1 retry
   useEffect(() => {
@@ -57,12 +91,22 @@ export function PreviewIFrame({ name, src }: { name: string; src: string }) {
   }, [name])
 
   return (
-    <div className="flex w-full flex-1 flex-col bg-v0-blue-900 p-4">
-      <iframe
-        className="block w-full flex-1 border-0"
-        src={src}
-        title="Preview"
-      />
+    <div className="mb-4 flex w-full flex-1 flex-col">
+      {ready ? (
+        <WebPreview defaultUrl={src}>
+          <WebPreviewNavigation>
+            <WebPreviewUrl />
+          </WebPreviewNavigation>
+          <WebPreviewBody src={src} />
+        </WebPreview>
+      ) : (
+        <div className="flex w-full flex-1 items-center justify-center text-muted-foreground text-sm">
+          <div className="flex items-center gap-2">
+            <Loader2Icon className="animate-spin" />
+            <span>Loading preview</span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

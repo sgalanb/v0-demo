@@ -40,7 +40,7 @@ export default async function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex h-full flex-col overflow-hidden">
         <Providers>
           {userId && preloadedProjects ? (
             <SidebarProvider>
