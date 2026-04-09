@@ -4,6 +4,9 @@ import { codeStorage } from "@/lib/code-storage/client"
 
 // version repos in case we need to change things in the future
 const CURRENT_REPO_VERSION = "v1"
+// explicit env to avoid duplicates across environments
+const CURRENT_ENVIRONMENT =
+  process.env.CURRENT_ENV === "development" ? "dev" : "prod"
 
 export async function createRepo({
   id,
@@ -28,7 +31,7 @@ export async function createRepoFromTemplate({
   newRepoId: string
 }) {
   const newRepo = await codeStorage.createRepo({
-    id: `${CURRENT_REPO_VERSION}-${newRepoId}`,
+    id: `${CURRENT_ENVIRONMENT}-${CURRENT_REPO_VERSION}-${newRepoId}`,
     baseRepo: { id: templateRepoId },
   })
 
@@ -46,14 +49,14 @@ export async function createRepoFromTemplate({
 
 export async function getRepo(repoId: string) {
   const repo = await codeStorage.findOne({
-    id: `${CURRENT_REPO_VERSION}-${repoId}`,
+    id: `${CURRENT_ENVIRONMENT}-${CURRENT_REPO_VERSION}-${repoId}`,
   })
   return repo
 }
 
 export async function deleteRepo(repoId: string) {
   await codeStorage.deleteRepo({
-    id: `${CURRENT_REPO_VERSION}-${repoId}`,
+    id: `${CURRENT_ENVIRONMENT}-${CURRENT_REPO_VERSION}-${repoId}`,
   })
 }
 
@@ -65,7 +68,7 @@ export async function createBranch({
   branchName: string
 }) {
   const repo = await codeStorage.findOne({
-    id: `${CURRENT_REPO_VERSION}-${repoId}`,
+    id: `${CURRENT_ENVIRONMENT}-${CURRENT_REPO_VERSION}-${repoId}`,
   })
 
   if (!repo) {
@@ -87,4 +90,12 @@ export async function getBranches(repoId: string) {
     .then((res) => {
       return res.branches
     })
+}
+
+export async function getRepoUrl(repoId: string) {
+  const repo = await getRepo(repoId)
+  return await repo?.getRemoteURL({
+    permissions: ["git:read", "git:write"],
+    ttl: 157_784_760, // 5 years in seconds
+  })
 }

@@ -5,25 +5,25 @@ import { api } from "@/lib/convex/_generated/api"
 import ProjectContent from "./content"
 
 export default async function ProjectPage({
-	params,
+  params,
 }: {
-	params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>
 }) {
-	const { slug } = await params
+  const { slug } = await params
 
-	const project = await fetchQuery(api.projects.getProjectBySlug, {
-		slug,
-	})
+  const project = await fetchQuery(api.projects.getProjectBySlug, {
+    slug,
+  })
 
-	const branches = await getBranches(project.slug)
+  const branches = await getBranches(project.slug)
 
-	return (
-		<>
-			<PageHeader
-				currentBreadcrumb={{ label: `${project.name ?? slug}` }}
-				parentBreadcrumb={{ label: "Projects" }}
-			/>
-			{branches && <ProjectContent branches={branches} slug={slug} />}
-		</>
-	)
+  return (
+    <>
+      <PageHeader
+        currentBreadcrumb={{ label: `${project.name ?? slug}` }}
+        parentBreadcrumb={{ label: "Projects" }}
+      />
+      {branches && <ProjectContent branches={branches} slug={slug} />}{" "}
+    </>
+  )
 }
