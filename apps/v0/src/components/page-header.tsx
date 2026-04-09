@@ -10,8 +10,13 @@ import { Separator } from "@workspace/ui/components/separator"
 import { SidebarTrigger } from "@workspace/ui/components/sidebar"
 
 interface PageHeaderProps {
+  branchBreadcrumb?: {
+    label: string
+    href?: string
+  }
   currentBreadcrumb?: {
     label: string
+    href?: string
   }
   parentBreadcrumb?: {
     label: string
@@ -22,8 +27,10 @@ interface PageHeaderProps {
 export function PageHeader({
   parentBreadcrumb,
   currentBreadcrumb,
+  branchBreadcrumb,
 }: PageHeaderProps) {
-  const hasBreadcrumbs = parentBreadcrumb ?? currentBreadcrumb
+  const hasBreadcrumbs =
+    parentBreadcrumb ?? currentBreadcrumb ?? branchBreadcrumb
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2">
@@ -56,8 +63,32 @@ export function PageHeader({
                   </>
                 )}
                 {currentBreadcrumb && (
+                  <>
+                    <BreadcrumbItem>
+                      {currentBreadcrumb.href ? (
+                        <BreadcrumbLink href={currentBreadcrumb.href}>
+                          {currentBreadcrumb.label}
+                        </BreadcrumbLink>
+                      ) : (
+                        <BreadcrumbPage>
+                          {currentBreadcrumb.label}
+                        </BreadcrumbPage>
+                      )}
+                    </BreadcrumbItem>
+                    {branchBreadcrumb && (
+                      <BreadcrumbSeparator className="hidden md:block" />
+                    )}
+                  </>
+                )}
+                {branchBreadcrumb && (
                   <BreadcrumbItem>
-                    <BreadcrumbPage>{currentBreadcrumb.label}</BreadcrumbPage>
+                    {branchBreadcrumb.href ? (
+                      <BreadcrumbLink href={branchBreadcrumb.href}>
+                        {branchBreadcrumb.label}
+                      </BreadcrumbLink>
+                    ) : (
+                      <BreadcrumbPage>{branchBreadcrumb.label}</BreadcrumbPage>
+                    )}
                   </BreadcrumbItem>
                 )}
               </BreadcrumbList>

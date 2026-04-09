@@ -6,6 +6,7 @@ import {
   type UIMessageChunk,
 } from "ai"
 import { getWorkflowMetadata, getWritable } from "workflow"
+import { createSandboxTools } from "@/workflows/chat/tools"
 import { chatMessageHook, getSystemPrompt } from "@/workflows/chat/utils"
 import {
   writeRequestReceived,
@@ -56,10 +57,12 @@ export async function chat(
     }
   }
 
+  const tools = await createSandboxTools(project)
+
   const agent = new DurableAgent({
     model: "anthropic/claude-haiku-4.5",
     system: getSystemPrompt(project),
-    // tools: flightBookingTools,
+    tools,
   })
 
   const hook = chatMessageHook.create({ token: runId })

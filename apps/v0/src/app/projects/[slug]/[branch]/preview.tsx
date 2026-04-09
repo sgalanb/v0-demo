@@ -3,10 +3,14 @@ import { PreviewIFrame } from "@/app/projects/[slug]/[branch]/preview-iframe"
 import { getRepoUrl } from "@/lib/code-storage/actions"
 
 // version sandboxes in case we need to change things in the future
-const CURRENT_SANDBOX_VERSION = "v1"
+export const CURRENT_SANDBOX_VERSION = "v1"
 // explicit env to avoid duplicates across environments
-const CURRENT_ENVIRONMENT =
+export const CURRENT_ENVIRONMENT =
   process.env.CURRENT_ENV === "development" ? "dev" : "prod"
+
+export function getSandboxName(slug: string, branch: string) {
+  return `${CURRENT_ENVIRONMENT}-${CURRENT_SANDBOX_VERSION}-${slug}-${branch}`
+}
 
 async function tryGetSandbox(name: string): Promise<Sandbox | null> {
   try {
@@ -26,7 +30,7 @@ export default async function Preview({
   slug: string
   branch: string
 }) {
-  const name = `${CURRENT_ENVIRONMENT}-${CURRENT_SANDBOX_VERSION}-${slug}-${branch}`
+  const name = getSandboxName(slug, branch)
 
   // Try to resume an existing persistent sandbox first
   const existingSandbox = await tryGetSandbox(name)
@@ -36,6 +40,7 @@ export default async function Preview({
       cmd: "pnpm",
       args: ["run", "dev"],
       detached: true,
+      env: { WATCHPACK_POLLING: "true" },
     })
 
     return <PreviewIFrame name={name} src={existingSandbox.domain(3000)} />
@@ -56,6 +61,9 @@ export default async function Preview({
     snapshotExpiration: 0, // no expiration
     timeout: 5 * 60 * 1000, // 5 minutes
     ports: [3000],
+    resources: {
+      vcpus: 4,
+    },
   })
 
   // install pnpm
