@@ -62,9 +62,6 @@ export const getProjectBySlug = query({
       .query("projects")
       .withIndex("by_slug", (q) => q.eq("slug", args.slug))
       .unique()
-    if (!project) {
-      throw new Error("Project not found")
-    }
     return project
   },
 })

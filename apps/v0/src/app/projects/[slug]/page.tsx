@@ -1,4 +1,5 @@
 import { fetchQuery } from "convex/nextjs"
+import { notFound } from "next/navigation"
 import { PageHeader } from "@/components/page-header"
 import { getBranches } from "@/lib/code-storage/actions"
 import { api } from "@/lib/convex/_generated/api"
@@ -14,6 +15,10 @@ export default async function ProjectPage({
   const project = await fetchQuery(api.projects.getProjectBySlug, {
     slug,
   })
+
+  if (!project) {
+    notFound()
+  }
 
   const branches = await getBranches(project.slug)
 
