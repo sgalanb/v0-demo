@@ -36,7 +36,7 @@ export default async function ProjectBranchPage({
               href: `/projects/${slug}/${branch}`,
             }}
             currentBreadcrumb={{
-              label: `${project.name ?? slug}`,
+              label: `${project?.name ?? slug}`,
               href: `/projects/${slug}`,
             }}
             parentBreadcrumb={{ label: "Projects" }}
