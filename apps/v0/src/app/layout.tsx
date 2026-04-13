@@ -1,10 +1,10 @@
-import { auth } from "@clerk/nextjs/server"
-import { SidebarInset, SidebarProvider } from "@workspace/ui/components/sidebar"
-import { preloadQuery } from "convex/nextjs"
 import { Providers } from "@/app/providers"
 import { AppSidebar } from "@/components/app-sidebar"
 import { api } from "@/lib/convex/_generated/api"
+import { auth } from "@clerk/nextjs/server"
+import { SidebarInset, SidebarProvider } from "@workspace/ui/components/sidebar"
 import "@workspace/ui/globals.css"
+import { preloadQuery } from "convex/nextjs"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 

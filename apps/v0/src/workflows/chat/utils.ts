@@ -6,15 +6,15 @@ import z from "zod"
  * The workflow waits on this hook to receive follow-up messages from the client.
  */
 export const chatMessageHook = defineHook({
-	schema: z.object({
-		message: z.string(),
-	}),
+  schema: z.object({
+    message: z.string(),
+  }),
 })
 
 export async function executeSleep({ durationMs }: { durationMs: number }) {
-	// Note: No "use step" here - sleep is a workflow-level function
-	await sleep(durationMs)
-	return { message: `Slept for ${durationMs}ms` }
+  // Note: No "use step" here - sleep is a workflow-level function
+  await sleep(durationMs)
+  return { message: `Slept for ${durationMs}ms` }
 }
 
 // System prompt

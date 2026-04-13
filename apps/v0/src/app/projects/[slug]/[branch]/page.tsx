@@ -1,6 +1,3 @@
-import { fetchQuery } from "convex/nextjs"
-import { Loader2Icon } from "lucide-react"
-import { Suspense } from "react"
 import Chat from "@/app/projects/[slug]/[branch]/chat"
 import CommitButton from "@/app/projects/[slug]/[branch]/commit-button"
 import { CopyUrlButton } from "@/app/projects/[slug]/[branch]/copy-url-button"
@@ -8,6 +5,9 @@ import Preview from "@/app/projects/[slug]/[branch]/preview"
 import { PageHeader } from "@/components/page-header"
 import { getRepoUrl } from "@/lib/code-storage/actions"
 import { api } from "@/lib/convex/_generated/api"
+import { fetchQuery } from "convex/nextjs"
+import { Loader2Icon } from "lucide-react"
+import { Suspense } from "react"
 
 export default async function ProjectBranchPage({
   params,

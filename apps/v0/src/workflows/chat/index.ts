@@ -1,3 +1,5 @@
+import { createSandboxTools } from "@/workflows/chat/tools"
+import { chatMessageHook, getSystemPrompt } from "@/workflows/chat/utils"
 import { DurableAgent } from "@workflow/ai/agent"
 import {
   convertToModelMessages,
@@ -6,8 +8,6 @@ import {
   type UIMessageChunk,
 } from "ai"
 import { getWorkflowMetadata, getWritable } from "workflow"
-import { createSandboxTools } from "@/workflows/chat/tools"
-import { chatMessageHook, getSystemPrompt } from "@/workflows/chat/utils"
 import {
   writeRequestReceived,
   writeTurnEnd,
@@ -23,7 +23,7 @@ import {
 export async function chat(
   initialMessages: UIMessage[],
   requestReceivedAt: number,
-  project: { slug: string; branch: string }
+  project: { slug: string; branch: string },
 ) {
   "use workflow"
 
@@ -95,7 +95,7 @@ export async function chat(
       turnNumber,
       Date.now() - turnStartTime,
       stepsForTurn,
-      totalStepCount
+      totalStepCount,
     )
 
     messages.push(...result.messages)

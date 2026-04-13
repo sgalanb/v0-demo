@@ -1,31 +1,31 @@
 {
-    "$schema": "https://turborepo.dev/schema.json",
-    "ui": "tui",
-    "globalEnv": [
-      "CLERK_SECRET_KEY",
-      "CODE_STORAGE_API_KEY",
-      "CODE_STORAGE_ORG_NAME",
-      "CONVEX_DEPLOY_KEY",
-      "CONVEX_DEPLOYMENT",
-      "VERCEL_OIDC_TOKEN"
-    ],
-    "tasks": {
-      "build": {
-        "dependsOn": ["^build"],
-        "inputs": ["$TURBO_DEFAULT$", ".env*"],
-        "outputs": [".next/**", "!.next/cache/**", "dist/**"]
-      },
-      "lint": {},
-      "format": {
-        "cache": false
-      },
-      "check-types": {
-        "dependsOn": ["^check-types"]
-      },
-      "dev": {
-        "cache": false,
-        "persistent": true
-      }
+  "$schema": "https://turborepo.dev/schema.json",
+  "ui": "tui",
+  "globalEnv": [
+    "CLERK_SECRET_KEY",
+    "CODE_STORAGE_API_KEY",
+    "CODE_STORAGE_ORG_NAME",
+    "CONVEX_DEPLOY_KEY",
+    "CONVEX_DEPLOYMENT",
+    "VERCEL_OIDC_TOKEN",
+    "CURRENT_ENV"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    },
+    "lint": {},
+    "format": {
+      "cache": false
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
     }
   }
-  
+}

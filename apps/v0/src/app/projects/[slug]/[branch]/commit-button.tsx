@@ -1,5 +1,6 @@
 "use client"
 
+import { commitChanges } from "@/app/projects/[slug]/[branch]/actions"
 import { Button } from "@workspace/ui/components/button"
 import {
   Dialog,
@@ -15,7 +16,6 @@ import { Input } from "@workspace/ui/components/input"
 import { Label } from "@workspace/ui/components/label"
 import { GitCommitIcon, Loader2Icon } from "lucide-react"
 import { useState } from "react"
-import { commitChanges } from "@/app/projects/[slug]/[branch]/actions"
 
 export default function CommitButton({
   slug,

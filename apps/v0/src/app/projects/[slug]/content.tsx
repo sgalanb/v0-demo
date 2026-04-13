@@ -1,5 +1,7 @@
 "use client"
 
+import { createBranch } from "@/lib/code-storage/actions"
+import { formatRelativeTime } from "@/utils"
 import type { BranchInfo } from "@pierre/storage"
 import { Button } from "@workspace/ui/components/button"
 import {
@@ -26,8 +28,6 @@ import {
 import { Loader2Icon, PlusIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { createBranch } from "@/lib/code-storage/actions"
-import { formatRelativeTime } from "@/utils"
 
 export default function ProjectContent({
   slug,
@@ -133,7 +133,7 @@ export default function ProjectContent({
             .sort(
               (a, b) =>
                 new Date(a.createdAt).getTime() -
-                new Date(b.createdAt).getTime()
+                new Date(b.createdAt).getTime(),
             )
             .map((branch) => (
               <TableRow key={branch.name}>

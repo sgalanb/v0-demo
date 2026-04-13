@@ -1,5 +1,8 @@
 "use client"
 
+import { createRepoFromTemplate, deleteRepo } from "@/lib/code-storage/actions"
+import { api } from "@/lib/convex/_generated/api"
+import type { Doc } from "@/lib/convex/_generated/dataModel"
 import { Button } from "@workspace/ui/components/button"
 import {
   Dialog,
@@ -38,9 +41,6 @@ import {
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { createRepoFromTemplate, deleteRepo } from "@/lib/code-storage/actions"
-import { api } from "@/lib/convex/_generated/api"
-import type { Doc } from "@/lib/convex/_generated/dataModel"
 
 export function NavProjects({
   projects,

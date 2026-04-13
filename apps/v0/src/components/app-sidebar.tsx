@@ -1,5 +1,9 @@
 "use client"
 
+import { NavProjects } from "@/components/nav-projects"
+import { NavSecondary } from "@/components/nav-secondary"
+import { NavUser } from "@/components/nav-user"
+import type { api } from "@/lib/convex/_generated/api"
 import { useUser } from "@clerk/nextjs"
 import {
   Sidebar,
@@ -9,10 +13,6 @@ import {
 import { type Preloaded, usePreloadedQuery } from "convex/react"
 import { SendIcon } from "lucide-react"
 import type * as React from "react"
-import { NavProjects } from "@/components/nav-projects"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
-import type { api } from "@/lib/convex/_generated/api"
 
 const data = {
   navSecondary: [
@@ -43,7 +43,7 @@ export function AppSidebar({
         <NavUser
           user={{
             name: user?.fullName ?? "",
-            email: user?.emailAddresses[0].emailAddress ?? "",
+            email: user?.emailAddresses[0]?.emailAddress ?? "",
             avatar: user?.imageUrl ?? "",
           }}
         />

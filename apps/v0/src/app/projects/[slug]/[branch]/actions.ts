@@ -1,7 +1,7 @@
 "use server"
 
-import { Sandbox } from "@vercel/sandbox"
 import { getSandboxName } from "@/app/projects/[slug]/[branch]/preview"
+import { Sandbox } from "@vercel/sandbox"
 
 const HEARTBEAT_INTERVAL_MS = 2 * 60 * 1000 // 2 minutes
 

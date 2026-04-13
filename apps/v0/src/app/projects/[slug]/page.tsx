@@ -1,8 +1,8 @@
-import { fetchQuery } from "convex/nextjs"
-import { notFound } from "next/navigation"
 import { PageHeader } from "@/components/page-header"
 import { getBranches } from "@/lib/code-storage/actions"
 import { api } from "@/lib/convex/_generated/api"
+import { fetchQuery } from "convex/nextjs"
+import { notFound } from "next/navigation"
 import ProjectContent from "./content"
 
 export default async function ProjectPage({

@@ -1,8 +1,8 @@
+import { MarketingHome } from "@/components/marketing-home"
+import { PageHeader } from "@/components/page-header"
 import { SignInButton } from "@clerk/nextjs"
 import { auth } from "@clerk/nextjs/server"
 import { Button } from "@workspace/ui/components/button"
-import { MarketingHome } from "@/components/marketing-home"
-import { PageHeader } from "@/components/page-header"
 
 export default async function Home() {
   const { userId } = await auth()

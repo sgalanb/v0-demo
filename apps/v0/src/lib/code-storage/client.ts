@@ -1,5 +1,5 @@
-import "server-only"
 import { GitStorage } from "@pierre/storage"
+import "server-only"
 
 export const codeStorage = new GitStorage({
   name: process.env.CODE_STORAGE_ORG_NAME ?? "",

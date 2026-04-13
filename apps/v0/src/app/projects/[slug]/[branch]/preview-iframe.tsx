@@ -1,13 +1,13 @@
 "use client"
 
-import { Loader2Icon } from "lucide-react"
-import { useEffect, useState } from "react"
 import {
   WebPreview,
   WebPreviewBody,
   WebPreviewNavigation,
   WebPreviewUrl,
 } from "@/components/ai/web-preview"
+import { Loader2Icon } from "lucide-react"
+import { useEffect, useState } from "react"
 import { heartbeatSandbox } from "./actions"
 
 const HEARTBEAT_INTERVAL_MS = 2 * 60 * 1000 // 2 minutes

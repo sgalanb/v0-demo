@@ -18,7 +18,7 @@ const initialState: ActionState = {
 
 async function handleCreateRepo(
   _prev: ActionState,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionState> {
   const repoId = formData.get("repoId") as string
 
@@ -45,7 +45,7 @@ async function handleCreateRepo(
 export default function DevHelpers() {
   const [state, formAction, isPending] = useActionState(
     handleCreateRepo,
-    initialState
+    initialState,
   )
 
   return (
